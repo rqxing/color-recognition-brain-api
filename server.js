@@ -1,8 +1,10 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
+const cors = require('cors')
 
 const app = express();
-app.use(express.json())
+app.use(express.json());
+app.use(cors());
 
 const database = {
     users:[
@@ -11,41 +13,33 @@ const database = {
             name:'eva',
             email:'eva@gmail.com',
             entries:0,
-            joined:new Date()
+            joined:new Date(),
+            hash:bcrypt.hashSync('eva123', bcrypt.genSaltSync(10))
         },
         {
             id:'1',
             name:'shu',
             email:'shu@gmail.com',
             entries:0,
-            joined:new Date()
-        }
-    ],
-    login:[
-        {
-            email:"eva@gmail.com",
-            hash:bcrypt.hashSync('eva123', bcrypt.genSaltSync(10))
-        },
-        {
-            email:"shu@gmail.com",
+            joined:new Date(),
             hash:bcrypt.hashSync('shu123', bcrypt.genSaltSync(10))
         }
     ]
 }
 app.get('/',(req,res)=>{
-    res.send('homepage is working');
+    res.send(database.users);
 })
 
 app.post('/signin',(req,res)=>{
     const {email,password} = req.body;
     let found = false;
-    database.login.forEach(user =>{
+    database.users.forEach(user =>{
         if(user.email === email){
             found = true;
             if(bcrypt.compareSync(password, user.hash)){
-                return res.json('successfully logging in');
+                return res.json(user);
             }else{
-                return res.status(400).json('error logging in');
+                return res.status(400).json('wrong password');
             }
         }
     })
@@ -64,10 +58,7 @@ app.post('/register',(req,res)=>{
         name:name,
         email:email,
         entries:0,
-        joined:new Date()
-    })
-    database.login.push({
-        email:email,
+        joined:new Date(),
         hash:hash
     })
     res.json(database.users[database.users.length-1]);
