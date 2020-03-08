@@ -1,0 +1,14 @@
+{
+  "name": "color-recognition-brain-api",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "author": "Ruiqi Xing",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
