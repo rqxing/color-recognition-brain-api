@@ -10,9 +10,9 @@ const db = knex({
     client: 'pg',
     connection: {
       host : '127.0.0.1',
-      port:"3002",
+      port:process.env.dbPORT,
       user : 'postgres',
-      password : 'secret',
+      password : process.env.dbPASSWORD,
       database : 'color-recognition-brain'
     }
 });
@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(cors());
 
 app.get('/',(req,res)=>{
-    res.send("homepage is working");
+    res.json("homepage is working");
 })
 
 app.post('/signin',(req,res) => {signin.handleSignin(req,res,db,bcrypt)})
@@ -61,6 +61,7 @@ app.put('/image',(req,res)=>{
         })
 })
 
-app.listen(process.env.PORT || 3001,()=>{
-    console.log('app is running on port ${process.env.PORT}')
+const serverPORT = process.env.serverPORT;
+app.listen(serverPORT,()=>{
+    console.log('app is running on port ${serverPORT}');
 }) 
