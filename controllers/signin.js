@@ -11,11 +11,11 @@ const  handleSignin = (req,res,db,bcrypt) => {
                         if(user.length){
                             res.json(user[0])
                         }else{
-                            res.status(400).json("can not load user profile");
+                            res.status(400).json("there is something wrong with database");
                         }
                     })
                     .catch(error=>{
-                        res.status(400).json('unable signin');
+                        res.status(400).json('there is something wrong with database');
                     }) 
                 }else{
                     res.status(400).json('wrong password');
@@ -24,9 +24,9 @@ const  handleSignin = (req,res,db,bcrypt) => {
                 res.status(400).json('no such user');
             }
         })
-        .catch(error=>{
-            res.status(400).json('unable signin');
-        })
+    .catch(error=>{
+        res.status(400).json('there is something wrong with database');
+    })
 }
 
 module.exports = {
