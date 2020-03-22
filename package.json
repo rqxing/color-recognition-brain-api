@@ -2,7 +2,7 @@
   "name": "color-recognition-brain-api",
   "version": "1.0.0",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "node server.js"
   },
   "author": "Ruiqi Xing",
   "dependencies": {

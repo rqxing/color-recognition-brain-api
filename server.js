@@ -61,7 +61,11 @@ app.put('/image',(req,res)=>{
         })
 })
 
-const serverPORT = process.env.serverPORT;
-app.listen(serverPORT,()=>{
-    console.log('app is running on port ${serverPORT}');
+// const serverPORT = process.env.serverPORT;
+// app.listen(serverPORT,()=>{
+//     console.log('app is running on port ${serverPORT}');
+// }) 
+
+app.listen(8080,()=>{
+    console.log('app is running on port 8080');
 }) 
