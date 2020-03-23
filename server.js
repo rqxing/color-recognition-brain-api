@@ -5,15 +5,17 @@ const knex = require('knex');
 
 const register = require("./controllers/register.js");
 const signin = require("./controllers/signin.js");
+const profile = require("./controllers/profile.js");
+const image = require("./controllers/image.js");
 
 const db = knex({
     client: 'pg',
     connection: {
-      host : '127.0.0.1',
-      port:process.env.dbPORT,
-      user : 'postgres',
-      password : process.env.dbPASSWORD,
-      database : 'color-recognition-brain'
+      host : process.env.host,
+      port:process.env.port,
+      user : process.env.user,
+      password : process.env.password,
+      database : process.env.database
     }
 });
 
@@ -22,49 +24,26 @@ app.use(express.json());
 app.use(cors());
 
 app.get('/',(req,res)=>{
-    res.json("homepage is working");
+    db.select("*").from("users")
+        .then(users =>{
+            if(users.length){
+                res.json(users[0]);
+            }else{
+                res.status(400).json('Be the first one to register.');
+            }
+        })
+        .catch(error=>{
+            res.status(400).json('Server is working, but can not connect to database.');
+        })
 })
 
 app.post('/signin',(req,res) => {signin.handleSignin(req,res,db,bcrypt)})
 
 app.post('/register',(req,res) => {register.handleRegister(req,res,db,bcrypt)});
 
-app.get('/profile/:id',(req,res)=>{
-    const {id} = req.params;
-    db.select("*").from("users").where({id:id})
-        .then(user =>{
-            if(user.length){
-                res.json(user[0]);
-            }else{
-                res.status(400).json('no such user');
-            }
-        })
-        .catch(error=>{
-            res.status(400).json('get profile failed');
-        })
-})
+app.get('/profile/:id',(req,res)=>{profile.handleProfileGet(req,res,db)})
 
-app.put('/image',(req,res)=>{
-    const {id} = req.body;
-    db("users").where('id','=',id)
-        .increment("entries",1)
-        .returning('entries')
-        .then(entries => {
-            if(entries.length){
-                res.json(parseInt(entries[0]));
-            }else{
-                res.status(400).json('no such user');
-            }
-        })
-        .catch(error=>{
-            res.status(400).json('update entries failed');
-        })
-})
-
-// const serverPORT = process.env.serverPORT;
-// app.listen(serverPORT,()=>{
-//     console.log('app is running on port ${serverPORT}');
-// }) 
+app.put('/image',(req,res)=>{image.handleImage(req,res,db)})
 
 app.listen(8080,()=>{
     console.log('app is running on port 8080');
