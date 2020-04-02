@@ -24,7 +24,7 @@ app.use(express.json());
 app.use(cors());
 
 app.get('/',(req,res)=>{
-    db.select("*").from("users")
+    db.select("*").from("users").orderBy("id")
         .then(users =>{
             if(users.length){
                 res.json(users[0]);
@@ -45,6 +45,6 @@ app.get('/profile/:id',(req,res)=>{profile.handleProfileGet(req,res,db)})
 
 app.put('/image',(req,res)=>{image.handleImage(req,res,db)})
 
-app.listen(8080,()=>{
+app.listen(8080,"0.0.0.0",()=>{
     console.log('app is running on port 8080');
 }) 
