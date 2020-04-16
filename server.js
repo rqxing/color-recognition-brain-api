@@ -2,6 +2,8 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const cors = require('cors');
 const knex = require('knex');
+// const fs = require('fs')
+// const https = require('https')
 
 const register = require("./controllers/register.js");
 const signin = require("./controllers/signin.js");
@@ -45,6 +47,14 @@ app.get('/profile/:id',(req,res)=>{profile.handleProfileGet(req,res,db)})
 
 app.put('/image',(req,res)=>{image.handleImage(req,res,db)})
 
-app.listen(8080,"0.0.0.0",()=>{
-    console.log('app is running on port 8080');
-}) 
+app.listen(3001,"0.0.0.0",()=>{
+    console.log('app is running on port 3001');
+})
+
+// const privateKey = fs.readFileSync('sslcert/server.key','utf8');
+// const certificate = fs.readFileSync('sslcert/server.pem', 'utf8');
+// const credentials = {key: privateKey, cert: certificate};
+// const httpsServer = https.createServer(credentials, app);
+// httpsServer.listen(3001,"0.0.0.0",()=>{
+//     console.log('app is running on port 3001')
+// })
